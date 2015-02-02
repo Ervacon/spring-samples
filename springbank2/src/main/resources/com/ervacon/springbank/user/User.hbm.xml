@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.ervacon.springbank.user" default-access="field">
+	<class name="User">
+		<id name="id" type="long" access="property">
+			<generator class="native"/>
+		</id>
+		
+		<property name="userName" not-null="true"/>
+		<property name="password" not-null="true"/>
+		<property name="clientId" not-null="true"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-2.5.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+
+	<import resource="data-access.xml"/>
+	
+	<context:annotation-config/>
+
+	<bean id="clientRepository" class="com.ervacon.springbank.domain.HibernateClientRepository">
+		<constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="clientService" class="com.ervacon.springbank.domain.ClientServiceImpl">
+		<constructor-arg ref="clientRepository"/>
+	</bean>
+
+	<bean id="accountRepository" class="com.ervacon.springbank.domain.HibernateAccountRepository">
+		<constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="accountService" class="com.ervacon.springbank.domain.AccountServiceImpl">
+		<constructor-arg ref="accountRepository"/>
+		<constructor-arg ref="clientRepository"/>
+	</bean>
+
+	<bean id="paymentProcessingEngine" class="com.ervacon.springbank.domain.PaymentProcessingEngineImpl">
+		<constructor-arg ref="accountService"/>
+	</bean>
+	
+	<bean id="userRepository" class="com.ervacon.springbank.user.HibernateUserRepository">
+		<constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="userService" class="com.ervacon.springbank.user.UserServiceImpl">
+		<constructor-arg ref="userRepository"/>
+		<constructor-arg ref="clientRepository"/>
+		
+		<security:custom-authentication-provider/>
+	</bean>
+
+    <!-- load sample data -->
+    
+    <bean class="com.ervacon.springbank.sampledata.SampleDataMother" lazy-init="false"/>
+    
+</beans>

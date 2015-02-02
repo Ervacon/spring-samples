@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE webflow PUBLIC "-//SPRING//DTD WEBFLOW//EN" "http://www.springframework.org/dtd/spring-webflow.dtd">
+
+<!-- A webflow that defines the wizard to compose a shirt and save it. -->
+<webflow id="composeShirt" start-state="referenceData">
+
+	<!-- setup some flow-scoped reference data -->
+	<action-state id="referenceData">
+		<action bean="composeShirtAction"/>
+		<transition on="success" to="step1"/>
+	</action-state>
+
+	<!-- obtain basic shirt properties -->
+	<view-state id="step1" view="composeShirtStep1">
+		<entry>
+			<action bean="composeShirtAction" method="setupForm"/>
+		</entry>
+		<transition on="ok" to="printSwitch">
+			<action bean="composeShirtAction" method="bindAndValidate">
+				<property name="validatorMethod" value="validateStep1"/>
+			</action>
+		</transition>
+		<transition on="cancel" to="end"/>
+	</view-state>
+
+	<!-- does the user want a graphical print? -->
+	<decision-state id="printSwitch">
+		<if test="${flowScope.shirtFbo.graphical}" then="step2Graphical" else="step2Text"/>
+	</decision-state>
+
+	<!-- obtain shirt print text -->
+	<view-state id="step2Text" view="composeShirtStep2Text">
+		<entry>
+			<action bean="composeShirtAction" method="setupForm"/>
+		</entry>
+		<transition on="ok" to="step3">
+			<action bean="composeShirtAction" method="bindAndValidate">
+				<property name="validatorMethod" value="validateStep2"/>
+			</action>
+		</transition>
+		<transition on="cancel" to="end"/>
+	</view-state>
+
+	<!-- obtain shirt print graphic -->
+	<view-state id="step2Graphical" view="composeShirtStep2Graphical">
+		<entry>
+			<action bean="composeShirtAction" method="setupForm"/>
+		</entry>
+		<transition on="ok" to="step3">
+			<action bean="composeShirtAction" method="bindAndValidate">
+				<property name="validatorMethod" value="validateStep2"/>
+			</action>
+		</transition>
+		<transition on="cancel" to="end"/>
+	</view-state>
+
+	<!-- show shirt preview and get user confirmation -->
+	<view-state id="step3" view="composeShirtStep3">
+		<transition on="ok" to="createShirt"/>
+		<transition on="cancel" to="end"/>
+	</view-state>
+	
+	<!-- save the shirt in the database -->
+	<action-state id="createShirt">
+		<action bean="composeShirtAction"/>
+		<transition on="success" to="end"/>
+	</action-state>
+
+	<!-- end the flow and go back to the front page -->
+	<end-state id="end" view="redirect:/index.html"/>
+
+</webflow>

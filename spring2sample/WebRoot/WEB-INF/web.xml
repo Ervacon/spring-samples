@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  - Webapp deployment descriptor.
+  -
+  - author: Erwin Vervaet
+  -->
+
+<web-app version="2.4" 
+	xmlns="http://java.sun.com/xml/ns/j2ee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	
+	<!-- load root application context -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- serves classic Spring 1.x style stuff -->
+	<servlet>
+		<servlet-name>classic</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>classic</servlet-name>
+		<url-pattern>/classic/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- serves new Spring 2.x style stuff -->
+	<servlet>
+		<servlet-name>nextgen</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>nextgen</servlet-name>
+		<url-pattern>/nextgen/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- serves new Spring 2.x style stuff using SWF 1.0 -->
+	<servlet>
+		<servlet-name>flow</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>flow</servlet-name>
+		<url-pattern>/flow/*</url-pattern>
+	</servlet-mapping>
+	
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/WEB-INF/jsp/error.jsp</location>
+	</error-page>
+
+</web-app>

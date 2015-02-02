@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="formAction" class="org.springframework.webflow.action.FormAction">
+		<property name="formObjectClass" value="com.ervacon.todolist.domain.ToDo"/>
+		<property name="formObjectName" value="toDo"/>
+		<property name="propertyEditorRegistrar">
+			<bean class="com.ervacon.todolist.web.ToDoPropertyEditorRegistrar"/>
+		</property>
+	</bean>
+</beans>

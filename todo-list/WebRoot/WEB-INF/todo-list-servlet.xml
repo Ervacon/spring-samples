@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:flow="http://www.springframework.org/schema/webflow-config"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/webflow-config
+           http://www.springframework.org/schema/webflow-config/spring-webflow-config-1.0.xsd">
+
+	<!-- Domain Objects -->
+	
+	<bean id="toDoList" class="com.ervacon.todolist.domain.ToDoList" init-method="initTestData"/>
+
+	<!-- Spring MVC Configuration -->
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<bean id="toListController" name="/toDoList.html" class="com.ervacon.todolist.web.ToDoListController">
+		<property name="cacheSeconds" value="0"/>
+		<property name="toDoList" ref="toDoList"/>
+	</bean>
+	
+	<!-- Spring Web Flow Configuration -->
+	
+	<bean id="flowController" name="/flows.html" class="org.springframework.webflow.executor.mvc.FlowController">
+		<property name="flowExecutor" ref="flowExecutor"/>
+	</bean>
+	
+	<flow:executor id="flowExecutor" registry-ref="flowRegistry"/>
+	
+	<flow:registry id="flowRegistry">
+		<flow:location path="/WEB-INF/flows/*-flow.xml"/>
+	</flow:registry>
+</beans>

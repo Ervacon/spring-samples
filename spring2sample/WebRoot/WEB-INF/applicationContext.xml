@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  - Root application context of the webapp. Note the use of the Spring 2.x
+  - beans schema.
+  -
+  - author: Erwin Vervaet
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- services -->
+
+    <bean id="userManager" class="com.ervacon.spring2sample.service.StubUserManager" />
+
+	<!-- web controllers -->
+
+	<bean id="welcomeController" class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="welcome"/>
+	</bean>
+
+    <bean id="listController" class="com.ervacon.spring2sample.web.ListController">
+        <property name="userManager" ref="userManager" />
+    </bean>
+
+    <bean id="formController" class="com.ervacon.spring2sample.web.FormController">
+        <property name="formView" value="form" />
+        <property name="successView" value="redirect:list" />
+        <property name="userManager" ref="userManager" />
+        <property name="validator">
+        	<bean class="com.ervacon.spring2sample.web.UserValidator"/>
+        </property>
+    </bean>
+
+</beans>

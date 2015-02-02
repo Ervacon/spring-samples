@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  - Application context for the DispatcherServlet using Spring 2.x schema
+  - based notation and SWF 1.0.
+  -
+  - author: Erwin Vervaet
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:sample="http://www.ervacon.com/schema/sample"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	   http://www.ervacon.com/schema/sample WEB-INF/sample.xsd">
+
+	<mvc:view-resolvers>
+		<!-- find JSPs in /WEB-INF/jsp/flow -->
+		<mvc:internal-resource-view-resolver type="jstl" prefix="/WEB-INF/jsp/flow/" suffix=".jsp"/>
+	</mvc:view-resolvers>
+	
+	<mvc:url-mappings>
+		<!-- map the /welcome URI to the welcomeController -->
+		<mvc:url-mapping>
+			<mvc:handler path="/welcome" controller-ref="welcomeController"/>
+			<mvc:interceptor interceptor-ref="welcomeInterceptor"/>
+		</mvc:url-mapping>
+		<!-- mappings for the controllers managing the user list -->
+		<mvc:url-mapping>
+			<mvc:handler path="/list" controller-ref="listController"/>
+			<mvc:handler path="/form" controller-ref="flowController"/>
+			<mvc:interceptor interceptor-ref="userListAndFormInterceptor"/>
+		</mvc:url-mapping>
+	</mvc:url-mappings>
+	
+    <bean id="flowController" class="org.springframework.webflow.executor.mvc.FlowController">
+    	<property name="flowLocator" ref="flowRegistry"/>
+    </bean>
+    
+    <bean id="flowRegistry" class="org.springframework.webflow.registry.XmlFlowRegistryFactoryBean">
+    	<property name="flowLocations">
+    		<list>
+    			<value>/WEB-INF/flow/form.xml</value>
+    		</list>
+    	</property>
+    </bean>
+    
+    <bean id="formAction" class="com.ervacon.spring2sample.web.UserFormAction">
+    	<property name="formObjectName" value="command"/>
+    	<property name="formObjectClass" value="com.ervacon.spring2sample.domain.User"/>
+    	<property name="userManager" ref="userManager"/>
+    	<property name="validator">
+        	<bean class="com.ervacon.spring2sample.web.UserValidator"/>
+    	</property>
+    </bean>
+
+	<sample:interceptor id="welcomeInterceptor" prefix="FLOW - WELCOME (" suffix=")"/>
+	
+	<sample:interceptor id="userListAndFormInterceptor" prefix="FLOW - USER MANAGEMENT (" suffix=")"/>
+    
+</beans>

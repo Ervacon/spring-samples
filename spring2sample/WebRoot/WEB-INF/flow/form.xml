@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE flow PUBLIC "-//SPRING//DTD WEBFLOW 1.0//EN"
+	"http://www.springframework.org/dtd/spring-webflow-1.0.dtd">
+<!-- 
+  - Simple web flow that defines a flow equivalent to the SimpleFormController.
+  -
+  - author: Erwin Vervaet
+  -->
+  
+<flow start-state="editUser">
+
+	<view-state id="editUser" view="form">
+		<entry-actions>
+			<action bean="formAction" method="referenceData"/>
+			<action bean="formAction" method="setupForm"/>
+		</entry-actions>
+		<transition on="submit" to="saveUser">
+			<action bean="formAction" method="bindAndValidate"/>
+		</transition>
+		<transition on="cancel" to="endCancel"/>
+	</view-state>
+	
+	<action-state id="saveUser">
+		<action bean="userManager" method="saveUser(${requestScope.command})"/>
+		<!-- action bean="formAction" method="saveUser"/ -->
+		<transition on="success" to="endOk"/>
+	</action-state>
+	
+	<end-state id="endCancel" view="redirect:list"/>
+	
+	<end-state id="endOk" view="redirect:list"/>
+
+</flow>

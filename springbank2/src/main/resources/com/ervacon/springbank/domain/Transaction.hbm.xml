@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.ervacon.springbank.domain" default-access="field">
+	<class name="Transaction" abstract="true">
+		<id name="id" type="long" access="property">
+			<generator class="native"/>
+		</id>
+		
+		<property name="date"/>
+		<property name="amount"/>
+		<property name="message"/>
+	</class>
+	
+	<joined-subclass name="Deposit" extends="Transaction">
+		<key/>
+
+		<many-to-one name="creditAccount" cascade="all"/>		
+	</joined-subclass>
+	
+	<joined-subclass name="Withdrawal" extends="Transaction">
+		<key/>
+		
+		<many-to-one name="debitAccount" cascade="all"/>
+	</joined-subclass>
+	
+	<joined-subclass name="Transfer" extends="Transaction">
+		<key/>
+		
+		<many-to-one name="debitAccount" cascade="all"/>
+		<many-to-one name="creditAccount" cascade="all"/>
+	</joined-subclass>
+</hibernate-mapping>

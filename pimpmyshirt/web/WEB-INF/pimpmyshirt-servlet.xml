@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!-- in case we need handler interceptors -->
+	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+
+	<!-- a view resolver -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+	    <property name="prefix" value="/WEB-INF/jsp/"/>
+	    <property name="suffix" value=".jsp"/>
+    </bean>
+    
+    <!-- i18n -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="/WEB-INF/messages"/>
+		<property name="useCodeAsDefaultMessage"><value>true</value></property>
+		<property name="cacheSeconds"><value>5</value></property>
+	</bean>
+
+	<!-- handle file uploads using commons-fileupload -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+	<!-- front page controller -->
+    <bean name="/index.html" class="org.pimpmyshirt.web.RateShirtsController">
+		<property name="cacheSeconds" value="0"/>
+    	<property name="shirtService" ref="shirtService"/>
+    </bean>
+
+	<!-- image download controller -->
+    <bean name="/image.html" class="org.pimpmyshirt.web.ImageController">
+    	<property name="shirtService" ref="shirtService"/>
+    </bean>
+
+	<!-- controller to handle all flows in the entire app -->
+	<bean id="flowController" name="/flow.html" class="org.springframework.webflow.mvc.FlowController">
+		<property name="cacheSeconds" value="0"/>
+	</bean>
+    
+    <!-- the compose shirt flow -->
+    <bean id="composeShirt" class="org.springframework.webflow.config.XmlFlowFactoryBean">
+    	<property name="location" value="/WEB-INF/composeShirtFlow.xml"/>
+	</bean>
+	
+	<!-- action backing the composeShirt flow -->
+	<bean id="composeShirtAction" class="org.pimpmyshirt.web.ComposeShirtAction">
+    	<property name="shirtService" ref="shirtService"/>
+	</bean>
+    
+</beans>

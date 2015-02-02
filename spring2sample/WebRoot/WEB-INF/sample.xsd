@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  - Sample schema.
+  -
+  - author: Erwin Vervaet
+  -->
+  
+<xsd:schema xmlns="http://www.ervacon.com/schema/sample"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://www.ervacon.com/schema/sample"
+			elementFormDefault="qualified"
+			attributeFormDefault="unqualified">
+
+	<xsd:element name="interceptor">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:string"/>
+			<xsd:attribute name="prefix" type="xsd:string" use="optional"/>
+			<xsd:attribute name="suffix" type="xsd:string" use="optional"/>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

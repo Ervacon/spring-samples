@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.ervacon.springbank.domain" default-access="field">
+	<class name="Client">
+		<id name="id" type="long" access="property">
+			<generator class="native"/>
+		</id>
+		
+		<property name="firstName"/>
+		<property name="lastName"/>
+		<component name="address">
+			<property name="street"/>
+			<property name="poBox"/>
+			<property name="zipCode"/>
+			<property name="city"/>
+		</component>
+		
+		<set name="accountNumbers" fetch="join">
+			<key/>
+			<composite-element class="AccountNumber">
+				<property name="number" not-null="true"/>
+			</composite-element>
+		</set>
+		
+		<set name="beneficiaryAccountNumbers" fetch="join">
+			<key/>
+			<composite-element class="AccountNumber">
+				<property name="number" not-null="true"/>
+			</composite-element>
+		</set>
+	</class>
+</hibernate-mapping>

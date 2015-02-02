@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-1.0.xsd">
+
+	<start-state idref="showPage1"/>
+	
+	<view-state id="showPage1" view="page1.jsp">
+		<transition on="next" to="showPage2">
+			<set attribute="page1Input" scope="flow" value="${requestParameters.page1Input}"/>
+		</transition>
+	</view-state>
+
+	<view-state id="showPage2" view="page2.jsp">
+		<transition on="back" to="showPage1"/>
+		<transition on="next" to="showPage3">
+			<set attribute="page2Input" scope="flow" value="${requestParameters.page2Input}"/>
+		</transition>
+	</view-state>
+
+	<view-state id="showPage3" view="page3.jsp">
+		<transition on="back" to="showPage2"/>
+		<transition on="finish" to="endOk"/>
+	</view-state>
+
+	<end-state id="endOk" view="externalRedirect:/index.jsp"/>
+</flow>

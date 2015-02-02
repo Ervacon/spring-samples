@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:flow="http://www.springframework.org/schema/webflow-config"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-1.0.xsd">	
+	<bean name="/flows.html" class="org.springframework.webflow.executor.mvc.FlowController">
+		<property name="flowExecutor" ref="flowExecutor"/>
+	</bean>
+
+	<flow:executor id="flowExecutor" registry-ref="flowRegistry"/>
+	
+	<flow:registry id="flowRegistry">
+		<flow:location path="/WEB-INF/challenge-flow.xml"/>
+	</flow:registry>
+
+</beans>

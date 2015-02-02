@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.ervacon.springbank.domain" default-access="field">
+	<class name="Account" abstract="true">
+		<id name="id" type="long" access="property">
+			<generator class="native"/>
+		</id>
+		
+		<component name="number" class="AccountNumber">
+			<property name="number" not-null="true"/>
+		</component>
+		<property name="balance" not-null="true"/>
+	</class>
+	
+	<joined-subclass name="LocalAccount" extends="com.ervacon.springbank.domain.Account">
+		<key/>
+		
+		<many-to-one name="client" not-null="true" fetch="join"/>
+		<list name="history" fetch="join" cascade="all-delete-orphan">
+			<key/>
+			<index/>
+			<composite-element class="Entry">
+				<property name="appliedAmount"/>
+				<many-to-one name="transaction" cascade="all" fetch="join"/>
+			</composite-element>
+		</list>
+	</joined-subclass>
+	
+	<joined-subclass name="Beneficiary" extends="com.ervacon.springbank.domain.Account">
+		<key/>
+		
+		<component name="holder">
+			<property name="name"/>
+			<component name="address">
+				<property name="street"/>
+				<property name="poBox"/>
+				<property name="zipCode"/>
+				<property name="city"/>
+			</component>
+		</component>
+	</joined-subclass>
+</hibernate-mapping>

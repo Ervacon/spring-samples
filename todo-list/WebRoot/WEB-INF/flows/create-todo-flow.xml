@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-1.0.xsd">
+
+	<start-state idref="showEnterNameAndDeadline"/>
+	
+	<view-state id="showEnterNameAndDeadline" view="enterNameAndDeadline">
+		<render-actions>
+			<action bean="formAction" method="setupForm"/>
+		</render-actions>
+		<transition on="next" to="showEnterComments">
+			<action bean="formAction" method="bindAndValidate"/>
+		</transition>
+		<transition on="finish" to="showVerifyToDo">
+			<action bean="formAction" method="bindAndValidate"/>
+		</transition>
+	</view-state>
+	
+	<view-state id="showEnterComments" view="enterComments">
+		<render-actions>
+			<action bean="formAction" method="setupForm"/>
+		</render-actions>
+		<transition on="next" to="showVerifyToDo">
+			<action bean="formAction" method="bindAndValidate"/>
+		</transition>
+	</view-state>
+	
+	<view-state id="showVerifyToDo" view="verifyToDo">
+		<transition on="submit" to="submitToDo"/>
+	</view-state>
+	
+	<action-state id="submitToDo">
+		<bean-action bean="toDoList" method="addToDo">
+			<method-arguments>
+				<argument expression="flowScope.toDo"/>
+			</method-arguments>
+		</bean-action>
+		<transition on="success" to="end"/>
+	</action-state>
+	
+	<end-state id="end" view="externalRedirect:/toDoList.html"/>
+	
+	<end-state id="endCancel" view="externalRedirect:/toDoList.html"/>
+	
+	<global-transitions>
+		<transition on="cancel" to="endCancel"/>
+	</global-transitions>
+	
+	<import resource="create-todo-context.xml"/>
+
+</flow>

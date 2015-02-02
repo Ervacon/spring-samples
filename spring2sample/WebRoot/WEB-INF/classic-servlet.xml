@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+  - Application context for the DispatcherServlet using Spring 1.x DTD
+  - based notation.
+  -
+  - author: Erwin Vervaet
+  -->
+
+<beans>
+
+	<!-- find JSPs in /WEB-INF/jsp/classic -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"><value>org.springframework.web.servlet.view.JstlView</value></property>
+		<property name="prefix"><value>/WEB-INF/jsp/classic/</value></property>
+		<property name="suffix"><value>.jsp</value></property>
+	</bean>
+
+	<!-- map the /welcome URI to the welcomeController -->
+	<bean id="welcomeMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/welcome">welcomeController</prop>
+			</props>
+		</property>
+		<property name="interceptors">
+			<list>
+				<ref bean="welcomeInterceptor"/>
+			</list>
+		</property>
+	</bean>
+
+	<!-- mappings for the controllers managing the user list -->
+	<bean id="userManagementMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/list">listController</prop>
+				<prop key="/form">formController</prop>
+			</props>
+		</property>
+		<property name="interceptors">
+			<list>
+				<ref bean="userListAndFormInterceptor"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="welcomeInterceptor" class="com.ervacon.spring2sample.web.SampleHandlerInterceptor">
+		<property name="prefix" value="CLASSIC - WELCOME ("/>
+		<property name="suffix" value=")"/>
+	</bean>
+
+	<bean id="userListAndFormInterceptor" class="com.ervacon.spring2sample.web.SampleHandlerInterceptor">
+		<property name="prefix" value="CLASSIC - USER MANAGEMENT ("/>
+		<property name="suffix" value=")"/>
+	</bean>
+
+</beans>
